@@ -1,0 +1,33 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.46);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+  }
+  
+  .modal_content {
+    overflow-y: auto;
+    margin: 1vh 10vw ;
+    max-height: 95vh;
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.12);
+  }
+  
+  .modal_content::-webkit-scrollbar {
+    width: 12px !important;
+  }
+
+  @media only screen and (max-width: 500px) {
+    /* For mobile phones: */
+    .modal_content {
+      margin: 20px ;
+    }
+  }
+  

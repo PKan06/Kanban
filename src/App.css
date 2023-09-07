@@ -1,38 +1,82 @@
-.App {
+
+.custom-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  border-radius: 50px;
+  border: 1px solid #ccc;
+  background-color: #d0cece;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  border: 1px solid rgb(105, 105, 105);
+  background-color: #c8c2c2;
+}
+
+.app {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app_nav {
+  padding: 10px  30px;
+  margin: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 10px 10px 20px rgb(56, 40, 40);
+  position: relative;
+  top: 0;
+  z-index: 100;
+  background-color: #ffffff;
+}
+
+.app_boards_container {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  padding-top: 20px;
+  overflow-x: auto;
+  width: auto;
+}
+
+
+.app_boards {
+  height: 100%;
+  padding: 0px 40px;
+  display: flex;
+  gap: 30px;
+}
+
+@media only screen and (max-width: 500px) {
+  /* For mobile phones: */
+  .app_boards {
+    padding: 10px 20px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: auto;
+  }
+}
+
+.app_boards_add-board {
+  background-color: #fff;
+  color: #000;
+  border-radius: 10px;
+  box-shadow: 1px 1px 0 1px rgba(0, 0, 0, 0.12);
+  width: 200px;
+  padding: 10px 10px;
+  margin: auto 10px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.app_boards_add-board:hover{
+  background-color: #ccc;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.app_boards_add-board_edit {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
 }
