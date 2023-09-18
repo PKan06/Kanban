@@ -14,8 +14,7 @@
     overflow-y: auto;
     z-index: 5;
   }
-
+  
   .hand:hover{
     cursor: pointer;
   }
-  

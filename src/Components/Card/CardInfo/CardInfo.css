@@ -1,10 +1,9 @@
 .cardinfo {
-  padding: 30px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
-  min-width: 550px;
-  max-width: 650px;
   margin: 1px 30px;
+  margin-bottom: 20px;
 }
 
 .cardinfo_box {

@@ -27,7 +27,7 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   box-shadow: 10px 10px 20px rgb(56, 40, 40);
-  position: relative;
+  position: sticky;
   top: 0;
   z-index: 100;
   background-color: #ffffff;
@@ -40,12 +40,12 @@
   margin: auto;
   padding-top: 20px;
   overflow-x: auto;
-  width: auto;
 }
 
 
 .app_boards {
   height: 100%;
+  width: fit-content;
   padding: 0px 40px;
   display: flex;
   gap: 30px;
@@ -65,15 +65,16 @@
   background-color: #fff;
   color: #000;
   border-radius: 10px;
-  box-shadow: 1px 1px 0 1px rgba(0, 0, 0, 0.12);
+  box-shadow: 1px 1px 0 2px rgba(0, 0, 0, 0.12);
   width: 200px;
-  padding: 10px 10px;
+  padding: 10px;
   margin: auto 10px;
   text-align: center;
 }
 
 .app_boards_add-board:hover{
   background-color: #ccc;
+  box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.12);
 }
 .app_boards_add-board_edit {
   background-color: #fff;

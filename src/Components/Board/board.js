@@ -9,21 +9,20 @@ import "./Board.css";
 
 function Board(props) {
   const [showDropdown, setShowDropdown] = useState(false);
-
   return (
     <div className="board">
       <div className="board_header">
         <p className="board_header_title">
-          {props.board?.title} <span>{`${props.board?.cards?.length || "0"}`}</span>
+          {props.board?.title}{" "}
+          <span>{`${props.board?.Cards?.length || "0"}`}</span>
         </p>
-        <div
-          className="board_header_title_more"
-          onClick={() => {
-            // console.log("showDropdown : ",showDropdown);
-            setShowDropdown(true);
-          }}
-        >
-          <MoreVertical />
+        <div className="board_header_title_more">
+          <MoreVertical
+            onClick={() => {
+              // console.log("showDropdown : ",showDropdown);
+              setShowDropdown(true);
+            }}
+          />
           {showDropdown && (
             <Dropdown
               class="board_dropdown"
@@ -41,16 +40,16 @@ function Board(props) {
         </div>
       </div>
       <div className="board_cards custom-scroll">
-        {props.board?.cards?.map((item) => (
+        {props.board?.Cards?.map((item) => (
           <Card
             key={item.id}
             card={item}
-            removeCard={props.removeCard}
             boardID={props.board?.id}
+            removeCard={props.removeCard}
             handeldragEnd={props.handeldragEnd}
             handeldragEnter={props.handeldragEnter}
-            updateCard={props.updateCard}
-
+            // updateCard={props.updateCard}
+            fetchcards={props.fetchcards}
           />
         ))}
         <Editable
@@ -59,7 +58,7 @@ function Board(props) {
           placeholder="Enter Card Title"
           buttonText="Add Card"
           onsubmit={(value) => {
-            props.addCard(value, props.board?.id)
+            props.addCard(value, props.board?.id);
             // console.log(value, props.board?.id);
           }}
         />

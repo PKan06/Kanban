@@ -6,20 +6,27 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    background-color: #dedede;
+    margin: 10px;
+    padding: 10px 10px;
+    border: 2px solid #b0b0b0;
+    border-radius: 20px;
   }
   
   .board_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0px 20px;
   }
   
   .board_header_title {
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.5rem;
     display: flex;
     gap: 5px;
     align-items: center;
+    margin: 0px;
   }
   
   .board_header_title span {
@@ -29,24 +36,26 @@
   .board_header_title_more {
     cursor: pointer;
     position: relative;
+    padding: 15px 0px;
   }
   
   .board_dropdown {
     box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.12);
-    padding: 4px 20px;
-    width: 150px !important;
+    padding: 0px 10px;
+    padding-left: 25px;
+    width: 140px !important;
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 10px;
     cursor: default;
   }
   .board_dropdown p {
-    border-bottom: 1px solid #575757;
     cursor: pointer;
   }
   
   .board_dropdown p:hover{
     color: red;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.12);
   }
   
   .board_cards {
@@ -57,7 +66,8 @@
     flex-direction: column;
     gap: 10px;
     overflow-y: auto;
-    overflow-x: auto;
+    border: 2px solid #f8f8f8;
+    border-radius: 10px;
   }
   
   .board_add-card {
@@ -66,7 +76,8 @@
     border-radius: 10px;
     padding: 10px 0px;
     box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.12);
-    width: auto;
+    width: 50%;
+    margin: 10px auto;
     text-align: center;
   }
   

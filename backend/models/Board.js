@@ -6,7 +6,7 @@ const BoardSchema = mongoose.Schema({
         required: true
     },
     Cards: [{
-        type: [mongoose.Schema.Types.ObjectId],
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Cards',
     }]
 })

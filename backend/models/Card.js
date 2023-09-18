@@ -7,11 +7,11 @@ const CardSchema = mongoose.Schema({
     },
     labels: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'lables',
+        ref: 'Lables'
     }],
     task:[{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'tasks'
+        ref: 'Tasks'
     }],
     desc:{
         type: String
@@ -21,6 +21,14 @@ const CardSchema = mongoose.Schema({
         default: Date.now,
     }
 })
+
+CardSchema.virtual('id').get(function () {
+    return this._id.toHexString();
+});
+
+CardSchema.set('toJSON', {
+    virtuals: true,
+});
 
 const Card = mongoose.model('Cards', CardSchema);
 

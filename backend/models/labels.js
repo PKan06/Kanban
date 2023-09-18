@@ -11,5 +11,14 @@ const LableSchema = mongoose.Schema({
     }
 })
 
-const Lables = mongoose.model('lables', LableSchema);
-export default Lables
+LableSchema.virtual('id').get(function () {
+    return this._id.toHexString();
+});
+
+LableSchema.set('toJSON', {
+    virtuals: true,
+});
+
+
+const Labels = mongoose.model('Lables', LableSchema);
+export default Labels

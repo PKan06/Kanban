@@ -5,187 +5,263 @@ import Task from "../models/Task.js";
 import Card from "../models/Card.js";
 import Board from "../models/Board.js";
 
-router.get("/", (req, res) => {
-  res.send("Welcome to card api");
+router.get("/", async (req, res) => {
+  await Card.find()
+    .populate("labels")
+    .populate("task")
+    .then((card) => {
+      if (card) res.status(200).send(card);
+      else res.status(404).send("We dont have cards yet ");
+    })
+    .catch((err) => res.status(500).send(err));
 });
 
-// adding card by boardid
+router.get("/:cardId", async (req, res) => {
+  await Card.findById(req.params.cardId)
+    .populate("labels")
+    .populate("task")
+    .then((card) => {
+      if (card) res.status(200).send(card);
+      else res.status(404).send("We dont have cards yet ");
+    })
+    .catch((err) => res.status(500).send(err));
+});
+
+// creating a new card and adding to its board board
 router.post("/:bid", async (req, res) => {
-  console.log(req.body.Cards);
-  // removing prevous data
-  req.body.Cards.map(async (cardItem) => {
-    // console.log(cardItem.id);
-    if (cardItem.labels.id && cardItem.labels.length != 0) {
-      cardItem.labels.map(async (labelsItem) => {
-        await Lables.findByIdAndRemove(labelsItem.id)
-          .then(() => console.log("Lables deleted"))
-          .catch((err) => console.log(err));
-      });
-    }
-    // console.log({ card: card });
-    if (cardItem.tasks.id && cardItem.tasks.length != 0) {
-      cardItem.tasks.map(async (taskItem) => {
-        await Task.findByIdAndRemove(taskItem.id)
-          .then(() => console.log("task deleted"))
-          .catch((err) => console.log(err));
-      });
-    }
-    await Card.findByIdAndRemove(cardItem.id).catch((err) => console.log(err));
+  // console.log(req.body);
+  /* Card : {creation} from frontend
+    title
+  */
+
+  const board = await Board.findById(req.params.bid).catch((err) =>
+    console.log(err.reason)
+  );
+
+  let newCard = new Card({
+    title: req.body.title,
   });
-
-  let TaskIdsResolved = [];
-  let LabelIdsResolved = [];
-
-  req.body.Cards.map(async (card) => {
-    if (card.labels.length != 0) {
-        LabelIdsResolved = await Promise.all(
-        card.labels.map(async (LabelItem) => {
-          let newLabel = await Lables({
-            text: LabelItem.text,
-            Color: LabelItem.color,
-          });
-          console.log(newLabel);
-          newLabel = await newLabel.save().catch((err) => console.log(err));
-          return newLabel.id;
-        })
-      );
-      
-      console.log(LabelIdsResolved);
-    }
-    // console.log("card.tasks --> ", card.tasks.length);
-    if (card.tasks.length != 0) {
-      const TaskIds = Promise.all(
-        card.tasks.map(async (taskItem) => {
-          let newTask = await Task({
-            title: taskItem.title,
-          });
-          //   console.log(newCard);
-          newTask = await newTask.save().catch((err) => console.log(err));
-          return newTask.id;
-        })
-      );
-      TaskIdsResolved = await TaskIds;
-    }
-  });
-
-  console.log(TaskIdsResolved, LabelIdsResolved);
-  let CarsIdsResolved = [];
-  if (LabelIdsResolved.length == 0 && TaskIdsResolved.length == 0) {
-    const CardIds = Promise.all(
-      req.body.Cards.map(async (cardItem) => {
-        let newCard = await Card({
-          title: cardItem.title,
-          desc: cardItem.desc || "",
+  newCard = await newCard.save();
+  board.Cards.push(newCard);
+  board
+    .save()
+    .then(async (board) => {
+      if (board) {
+        // console.log(card);
+        res.status(200).send({
+          success: true,
+          msg: "card added in board successfully",
         });
-        //   console.log(newCard);
-        newCard = await newCard.save();
-        return newCard.id;
-      })
-    );
-
-    CarsIdsResolved = await CardIds;
-  } else if (TaskIdsResolved.length == 0) {
-    const CardIds = Promise.all(
-      req.body.Cards.map(async (cardItem) => {
-        let newCard = await Card({
-          title: cardItem.title,
-          labels: LabelIdsResolved || [],
-          desc: cardItem.desc || "",
-        });
-        //   console.log(newCard);
-        newCard = await newCard.save();
-        return newCard.id;
-      })
-    );
-
-    CarsIdsResolved = await CardIds;
-  } else if (LabelIdsResolved.length == 0) {
-    const CardIds = Promise.all(
-      req.body.Cards.map(async (cardItem) => {
-        let newCard = await Card({
-          title: cardItem.title,
-          task: TaskIdsResolved || [],
-          desc: cardItem.desc || "",
-        });
-        //   console.log(newCard);
-        newCard = await newCard.save();
-        return newCard.id;
-      })
-    );
-
-    CarsIdsResolved = await CardIds;
-  } else {
-    const CardIds = Promise.all(
-      req.body.Cards.map(async (cardItem) => {
-        let newCard = await Card({
-          title: cardItem.title,
-          labels: LabelIdsResolved || [],
-          task: TaskIdsResolved || [],
-          desc: cardItem.desc || "",
-        });
-        //   console.log(newCard);
-        newCard = await newCard.save();
-        return newCard.id;
-      })
-    );
-
-    CarsIdsResolved = await CardIds;
-  }
-  //   res.status(200).send(CarsIdsResolved);
-
-  await Board.findByIdAndUpdate(
-    req.params.bid,
-    {
-      Cards: CarsIdsResolved,
-    },
-    { new: true }
-  )
-    .then((boardByID) => {
-      if (boardByID) res.status(200).send(boardByID);
-      else res.status(404).send({ status: false });
+      } else {
+        res.status(404).send({ success: false, msg: "board not found" });
+      }
     })
-    .catch((err) => res.status(404).send(err));
+    .catch((err) => console.log(err));
 });
 
-router.put("/", async (req, res) => {
-  const label = Promise.all(
-    req.body.labels.map(async (labelItems) => {
-      let newLabelItems = new Lables({
-        title: labelItems.title,
-        desc: labelItems.desc,
-      });
+// updating the card
+router.put("/:cardID", async (req, res) => {
+  // console.log(req.body);
+  /* Card : {updation} cardId
+    id
+    title
+    desc
+    date
+  */
 
-      newLabelItems = await newLabelItems.save();
-
-      return newLabelItems._id;
-    })
+  const card = await Card.findById(req.params.cardID).catch((err) =>
+    console.log(err.reason)
   );
-  const labelIdsResolved = await label;
+  if (!card) res.status(404).send({ success: false, msg: "card not found" });
+  else {
+    card.title = req.body.title || card.title;
+    card.desc = req.body.desc || card.desc;
+    card.date = req.body.date || card.date;
 
-  const task = Promise.all(
-    req.body.tasks.map(async (taskItems) => {
-      let newTaskItems = new Task({
-        title: taskItems.title,
-      });
+    await card
+      .save()
+      .then(async (card) => {
+        if (card) {
+          // console.log(card);
+          res.status(200).send({
+            success: true,
+            msg: "task added in card updated successfully",
+          });
+        } else res.status(404).send({ success: false, msg: "card not found" });
+      })
+      .catch((err) => console.log(err));
+  }
+});
 
-      newTaskItems = await newTaskItems.save();
-
-      return newTaskItems._id;
-    })
+// create new task and add its id to card
+router.put("/addTask/:cardID", async (req, res) => {
+  const card = await Card.findById(req.params.cardID).catch((err) =>
+    console.log(err.reason)
   );
+  if (!card) res.status(404).send({ success: false, msg: "card not found" });
+  else {
+    let NewTask = new Task({
+      title: req.body.title,
+      completed: req.body.completed,
+    });
 
-  const taskIdsResolved = await task;
+    NewTask = await NewTask.save().catch((err) => console.log(err));
+    if (!NewTask) res.status(400).send({ msg: "err" });
+    else {
+      card.task.push(NewTask.id);
+      await card
+        .save()
+        .then(async (card) => {
+          if (card) {
+            // console.log(card);
+            res.status(200).send({
+              success: true,
+              msg: "task added in card updated successfully",
+            });
+          } else
+            res.status(404).send({ success: false, msg: "card not found" });
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+});
 
-  let card = new Card({
-    title: req.body.title,
-    labels: labelIdsResolved,
-    task: taskIdsResolved,
-    desc: req.body.desc,
-  });
-  card = await card.save();
+router.put("/addLabel/:cardID", async (req, res) => {
+  const card = await Card.findById(req.params.cardID).catch((err) =>
+    console.log(err.reason)
+  );
+  if (!card) res.status(404).send({ success: false, msg: "card not found" });
+  else {
+    let NewLabel = new Lables({
+      text: req.body.text,
+      Color: req.body.color,
+    });
 
-  if (!card) return res.status(400).send("The Card cannot be created!");
-  res.send(order);
+    NewLabel = await NewLabel.save().catch((err) => console.log(err));
+    if (!NewLabel) res.status(400).send({ msg: "err" });
+    else {
+      card.labels.push(NewLabel.id);
+      await card
+        .save()
+        .then(async (card) => {
+          if (card) {
+            // console.log(card);
+            res.status(200).send({
+              success: true,
+              msg: "task added in card updated successfully",
+            });
+          } else
+            res.status(404).send({ success: false, msg: "card not found" });
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+});
+
+router.put("/deleteTask/:cardID", async (req, res) => {
+  const card = await Card.findById(req.params.cardID).catch((err) =>
+    console.log(err.reason)
+  );
+  if (!card) res.status(404).send({ success: false, msg: "card not found" });
+  else {
+    await Task.findByIdAndDelete(req.body.taskID)
+      .then(() => {
+        card.task.remove(req.body.taskID);
+        card
+          .save()
+          .then((card) => {
+            if (card) {
+              // console.log(card);
+              res.status(200).send({
+                success: true,
+                msg: "task id deleted successfully",
+              });
+            } else
+              res.status(404).send({ success: false, msg: "card not found" });
+          })
+          .catch((err) => {
+            res.status(500).send(err.message);
+          });
+      })
+      .catch((err) => res.status(500).send(err.message));
+  }
+});
+router.put("/deleteLabel/:cardID", async (req, res) => {
+  const card = await Card.findById(req.params.cardID).catch((err) =>
+    console.log(err.reason)
+  );
+  if (!card) res.status(404).send({ success: false, msg: "card not found" });
+  else {
+    await Lables.findByIdAndDelete(req.body.LabelID)
+      .then(() => {
+        card.labels.remove(req.body.LabelID);
+        card
+          .save()
+          .then((card) => {
+            if (card) {
+              // console.log(card);
+              res.status(200).send({
+                success: true,
+                msg: "Label deleted successfully",
+              });
+            } else
+              res.status(404).send({ success: false, msg: "card not found" });
+          })
+          .catch((err) => res.status(500).send(err));
+      })
+      .catch((err) => {
+        res.status(500).send(err.message);
+      });
+  }
+});
+
+// delete card
+router.delete("/deleteCard/:boardID", async (req, res) => {
+  // console.log(req.body, req.params);
+  const board = await Board.findById(req.params.boardID);
+  if (!board) res.status(404).send({ success: false, msg: "board not found" });
+  else {
+    // deleteing labels and task from there schema
+    Card.findById(req.body.cardID)
+      .then(async (card) => {
+        if (card) {
+          await card.labels.map(async (item) => {
+            await Lables.findByIdAndDelete(item.toString()).catch((err) => {
+              res.status(500).send(err.message);
+            });
+          });
+          await card.task.map(async (item) => {
+            await Task.findByIdAndDelete(item.toString()).catch((err) => {
+              res.status(500).send(err.message);
+            });
+          });
+          console.log({ msg: "card deleted succesfully" });
+        } else {
+          console.log({ msg: "card not found" });
+        }
+      })
+      .catch((err) => {
+        res.status(500).send({ msg: err });
+      });
+    // deleting card
+    await Card.findByIdAndDelete(req.body.cardID).catch((err) => {
+      console.log(err);
+    });
+    // deleting card from body
+    board.Cards.remove(req.body.cardID);
+    board
+      .save()
+      .then((board) => {
+        if (board) {
+          // console.log(card);
+          res.status(200).send({
+            success: true,
+            msg: "card deleted successfully",
+          });
+        } else res.status(404).send({ success: false, msg: "board not found" });
+      })
+      .catch((err) => res.status(500).send(err));
+  }
 });
 
 export default router;

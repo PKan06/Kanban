@@ -6,9 +6,7 @@ import "./Editable.css";
 
 function Editable(props) {
   const [showEdit, setShowEdit] = useState(false);
-  const [inputValue, setInputValue] = useState(
-    props.default || props.defaultValue || ""
-  );
+  const [inputValue, setInputValue] = useState(props.defaultValue || "");
   return (
     <div className="editable">
       {showEdit ? (
@@ -17,15 +15,22 @@ function Editable(props) {
             className={`editable_edit ${props.editclass || ""}`}
             onSubmit={(event) => {
               event.preventDefault();
-              if (props.onsubmit) props.onsubmit(inputValue);
-              setShowEdit(false);
-              setInputValue(props.default || "");
+              if (inputValue === "") {
+                alert(props.placeholder);
+              } else {
+                if (props.onsubmit) props.onsubmit(inputValue);
+                setShowEdit(false);
+                setInputValue("");
+              }
             }}
           >
             <input
               autoFocus
               type="text"
               value={inputValue}
+              onClick={(e) => {
+                setInputValue(e.target.value);
+              }}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder={props.placeholder || "Enter item"}
             />

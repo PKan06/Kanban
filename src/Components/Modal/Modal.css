@@ -4,7 +4,8 @@
     left: 0;
     height: 100%;
     width: 100vw;
-    background-color: rgba(0, 0, 0, 0.46);
+    background-color: rgba(0, 0, 0, 0.808);
+    transition: 500ms ;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,6 +13,9 @@
   }
   
   .modal_content {
+    min-width: 300px;
+    max-width: 600px;
+    flex-grow: 1;
     overflow-y: auto;
     margin: 1vh 10vw ;
     max-height: 95vh;
