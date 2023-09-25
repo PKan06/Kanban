@@ -9,8 +9,21 @@ import "./Board.css";
 
 function Board(props) {
   const [showDropdown, setShowDropdown] = useState(false);
+
   return (
-    <div className="board">
+    <div
+      className="board"
+      id={props.id}
+      onDragOver={(e) => {
+        e.preventDefault();
+      }}
+      onDrop={(e) => {
+        props.handelOnDrop(e.target.id);
+        e.target.style.border = "";
+        e.target.style.opacity = "1";
+        // console.log("getData", e.target.id);
+      }} // function will handel whatwill happen on drop
+    >
       <div className="board_header">
         <p className="board_header_title">
           {props.board?.title}{" "}
@@ -43,6 +56,7 @@ function Board(props) {
         {props.board?.Cards?.map((item) => (
           <Card
             key={item.id}
+            id={item.id}
             card={item}
             boardID={props.board?.id}
             removeCard={props.removeCard}
@@ -50,6 +64,7 @@ function Board(props) {
             handeldragEnter={props.handeldragEnter}
             // updateCard={props.updateCard}
             fetchcards={props.fetchcards}
+            onDropPlayer={props.onDropPlayer}
           />
         ))}
         <Editable

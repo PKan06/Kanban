@@ -12,7 +12,7 @@ function App() {
     axios
       .get("http://localhost:5000/board/all")
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setBoards(res.data);
       })
       .catch((err) => {
@@ -35,11 +35,12 @@ function App() {
     bid: "", // board id
     cid: "", // card id
   });
+  const [targetBoard, setTargetBoard] = useState("");
 
   const addCard = async (title, bid) => {
     // const index = boards.findIndex((item) => item.id === bid);
     // if (index < 0) return;
-    console.log("working");
+    // console.log("working");
     await axios.post(`http://localhost:5000/card/${bid}`, {
       title: title,
     });
@@ -101,32 +102,65 @@ function App() {
     fetchcards();
   };
 
-  const handeldragEnd = (bid, cid) => {
+  const handeldragEnd = async (bid, cid) => {
     // let s_boardIndex, s_cardIndex, t_boardIndex, t_cardIndex;
-    console.log("bid -> ",bid)
-    console.log("cid -> ",cid)
+    if (targetBoard !== "") {
+      // console.log("\nvalue ->", targetBoard);
+      // console.log("bid -> ", bid);
+      // console.log("cid -> ", cid);
+      const card_on_board = await axios.put(
+        `http://localhost:5000/board/card-on-board`,
+        {
+          T_bid: targetBoard,
+          bid: bid,
+          cid: cid,
+        }
+      );
+      setTargetBoard("");
+      console.log(card_on_board.data);
+      fetchcards();
+    } else if (cid !== targetCard.cid) {
+      // pick
+      // console.log("bid -> ", bid);
+      // console.log("cid -> ", cid);
 
-    console.log("T_bid -> ",targetCard.bid)
-    console.log("T_cid -> ",targetCard.cid)
-    // console.log("s_boardIndex -> ",s_boardIndex)
-    // console.log("s_cardIndex -> ",s_cardIndex)
-    // console.log("t_boardIndex -> ",t_boardIndex)
-    // console.log("t_cardIndex -> ",t_cardIndex)
-    // s_boardIndex = boards.findIndex((item) => item.id === bid);
+      // un-pick
+      // console.log("T_bid -> ", targetCard.bid);
+      // console.log("T_cid -> ", targetCard.cid);
+
+      const card_on_card_board = await axios.put(
+        `http://localhost:5000/board/card-on-card`,
+        {
+          bid: bid,
+          cid: cid,
+          T_bid: targetCard.bid,
+          T_cid: targetCard.cid,
+        }
+      );
+      console.log(card_on_card_board.data);
+      fetchcards();
+    }
+
+    // let s_boardIndex = boards.findIndex((item) => item.id === bid);
     // if (s_boardIndex < 0) return;
 
-    // s_cardIndex = boards[s_boardIndex]?.cards?.findIndex(
+    // let s_cardIndex = boards[s_boardIndex]?.cards?.findIndex(
     //   (item) => item.id === cid
     // );
     // if (s_cardIndex < 0) return;
 
-    // t_boardIndex = boards.findIndex((item) => item.id === targetCard.bid);
+    // let t_boardIndex = boards.findIndex((item) => item.id === targetCard.bid);
     // if (t_boardIndex < 0) return;
 
-    // t_cardIndex = boards[t_boardIndex]?.cards?.findIndex(
+    // let t_cardIndex = boards[t_boardIndex]?.cards?.findIndex(
     //   (item) => item.id === targetCard.cid
     // );
     // if (t_cardIndex < 0) return;
+
+    // console.log("s_boardIndex -> ",s_boardIndex)
+    // console.log("s_cardIndex -> ",s_cardIndex)
+    // console.log("t_boardIndex -> ",t_boardIndex)
+    // console.log("t_cardIndex -> ",t_cardIndex)
 
     // const tempBoards = [...boards];
     // const sourceCard = tempBoards[s_boardIndex].cards[s_cardIndex];
@@ -141,6 +175,7 @@ function App() {
     // });
   };
   const handeldragEnter = (bid, cid) => {
+    // tagerted card and board id
     if (targetCard.cid === cid) return;
     setTargetCard({
       bid,
@@ -148,6 +183,29 @@ function App() {
     });
   };
 
+  const handelOnDrop = async (bid) => {
+    // setTargetCard({
+    //   bid: bid,
+    //   cid: "",
+    // });
+    // console.log(e)
+    setTargetBoard(bid);
+    // if (bid !== "") {
+    //   console.log("handelondrop : ", bid);
+    //   console.log("T_bid -> ", targetCard.bid);
+    //   console.log("T_cid -> ", targetCard.cid);
+    //   const card_on_board = await axios.put(
+    //     `http://localhost:5000/board/card-on-board`,
+    //     {
+    //       handelondrop: bid,
+    //       T_bid: targetCard.bid,
+    //       T_cid: targetCard.cid,
+    //     }
+    //   );
+    //   console.log(card_on_board.data);
+    //   fetchcards();
+    // }
+  };
   // const updateCard = (bid, cid, card) => {
   //   const index = boards.findIndex((item) => item.id === bid);
   //   if (index < 0) return;
@@ -165,17 +223,42 @@ function App() {
   // useEffect(() => {
   //   localStorage.setItem("kanban", JSON.stringify(boards));
   // }, [boards]); // must to store in stringify other wize we will not able to retrive it back in strigify back
+
+  // const [{ isOver }, addToTeamRef] = useDrop({
+  //   accept: "player",
+  //   collect: (monitor) => ({ isOver: !!monitor.isOver() }),
+  // });
+
+  // // console.log(isOver);
+  // const [{ isOver: isPlayerOver }, removeFromTeamRef] = useDrop({
+  //   accept: "team",
+  //   collect: (monitor) => ({ isOver: !!monitor.isOver() }),
+  // });
+  // // console.log(isPlayerOver);
+
+  // const movePlayerToTeam = (item) => {
+  //   console.log(item);
+  //   // setPlayer((prev) => prev.filter((_, i) => item.index !== i));
+  //   // setTeam((prev) => [...prev, item]);
+  // };
+  // const removePlayerFromTeam = (item) => {
+  //   console.log(item);
+  //   // setTeam((prev) => prev.filter((_, i) => item.index !== i));
+  //   // setPlayer((prev) => [...prev, item]);
+  // };
+
   return (
     <div className="app">
       <div className="app_nav">
         <h1>Kanban Board</h1>
       </div>
 
-      <div className="app_boards_container">
+      <div className="app_boards_container  custom-scroll">
         <div className="app_boards">
           {boards.map((item) => (
             <Board
               key={item.id}
+              id={item.id}
               board={item}
               removeBoard={removeBoard}
               addCard={addCard}
@@ -184,6 +267,9 @@ function App() {
               handeldragEnter={handeldragEnter}
               // updateCard={updateCard}
               fetchcards={fetchcards}
+              handelOnDrop={handelOnDrop}
+              // ref={removeFromTeamRef}
+              // onDropPlayer={movePlayerToTeam}
             />
           ))}
           <div>

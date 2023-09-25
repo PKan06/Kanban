@@ -5,7 +5,8 @@
     gap: 10px;
     background-color: #fff;
     box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.12);
-    border-radius: 10px;
+    border: 0.1px dotted rgb(190, 190, 190);
+    border-radius: 4px;
   }
   
   .card:hover{
@@ -13,20 +14,24 @@
 
   }
   .card_top {
-    display: flex;
-    align-items: flex-start;
+    /* border: 2px solid red; */
+    /* display: flex; */
+    /* align-items: flex-start; */
+    width: 100%;
     padding: 10px 0px ;
   }
   
   .card_top_labels {
-    flex: 3;
-    display: flex;
+    width: 85%;
+    display: inline-flex;
     flex-wrap: wrap;
     gap: 5px;
     font-size: 14px;
     line-height: 21px;
-  }
+    /* border: 2px solid rgb(0, 255, 187); */
 
+  }
+  
   
   .card_top_labels label {
     border-radius: 40px;
@@ -35,29 +40,37 @@
     color: #fff;
     width: fit-content;
   }
-
+  
   .card_top svg{
     opacity: 0;
+    /* border: 2px solid blue; */
   }
-
+  
   .card:hover .card_top svg{
     opacity: 1;
   }
   
   .card_top_more {
-    width: 30px;
-    height: 20px;
+    /* flex-grow: 1; */
+    width: 10px;
+    height: 10px;
     transform: translateX(15px);
-    flex: 1;
+    flex-direction: column;
     cursor: pointer;
-    opacity: 0;
+    opacity: 1;
     transition: 200ms;
-    display: none;
+    display: inline-block;
+    /* border: 2px solid violet; */
   }
   
-  .card:hover .card_top_more {
+  .drop{
+    /* border: 2px solid rgb(130, 238, 152); */
+    
+  }
+  
+  .card:hover .drop {
     opacity: 1;
-    display: block;
+    border-radius: 10px;
   }
   
   .card_title {

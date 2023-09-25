@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CheckSquare, Clock, MoreHorizontal } from "react-feather";
+// import { useDrag } from "react-dnd";
 
 import Dropdown from "../Dropdown/Dropdown";
 
@@ -10,6 +11,21 @@ import Chip from "../chip/chip";
 function Card(props) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setshowModal] = useState(false);
+
+  // const [{ isDragging }, dragRef] = useDrag({
+  //   type: props.Type,
+  //   item: () => (props.card.id),
+  //   end: (item, monitor) => {
+  //     const dropResult = monitor.getDropResult();
+
+  //     if (item && dropResult) {
+  //       props.onDropPlayer(item);
+  //     }
+  //   },
+  //   collect: (monitor) => ({
+  //     isDragging: monitor.isDragging(),
+  //   }),
+  // });
 
   return (
     <>
@@ -25,10 +41,29 @@ function Card(props) {
       )}
       <div
         className="card"
+        // id={props.id}
         draggable
-        onDragEnter={() => props.handeldragEnter(props.boardID, props.card?.id)} // target
-        onDragEnd={() => props.handeldragEnd(props.boardID, props.card?.id)} // source
+        onDrag={(e) => {
+          e.target.style.border = "4px dotted gray";
+          e.target.style.opacity = "0.4";
+          e.target.style.background = "#efd0d0";
+        }}
+        onDragEnter={(e) => {
+          e.target.style.border = "2px solid red";
+          props.handeldragEnter(props.boardID, props.card?.id);
+          e.target.style.opacity = "1";
+        }} // target
+        onDragLeave={(e) => {
+          e.target.style.border = "";
+        }} // target
+        onDragEnd={(e) => {
+          e.target.style.border = "";
+          props.handeldragEnd(props.boardID, props.card?.id);
+          e.target.style.background = "#fff";
+          e.target.style.opacity = "1";
+        }} // source
         onClick={() => setshowModal(true)}
+        // ref={dragRef}
       >
         <div className="card_top">
           <div className="card_top_labels">

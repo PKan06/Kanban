@@ -1,16 +1,36 @@
 .board {
-    min-width: 250px;
-    width: auto;
+    min-width: 350px;
+    max-width: 500px;
     max-height: 90%;
-    flex-basis: 250px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    background-color: #dedede;
+    flex-grow: 1;
+    gap: 5px;
     margin: 10px;
     padding: 10px 10px;
+    position: relative;
+  }
+  
+  .board::before{
+    content: "";
+    background-color: #dedede;
     border: 2px solid #b0b0b0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
     border-radius: 20px;
+    width: 100%;
+    opacity: 0.5;
+    z-index: -1;
+  }
+  
+  @media only screen and (max-width: 500px) {
+    /* For mobile phones: */
+    .board {
+        min-width: 150px;
+        flex-grow: 1;
+      }
   }
   
   .board_header {
@@ -30,7 +50,7 @@
   }
   
   .board_header_title span {
-    color: rgb(145, 145, 145);
+    color: rgb(230, 230, 230);
   }
   
   .board_header_title_more {
@@ -41,7 +61,7 @@
   
   .board_dropdown {
     box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.12);
-    padding: 0px 10px;
+    padding: 0px ;
     padding-left: 25px;
     width: 140px !important;
     display: flex;
@@ -59,15 +79,16 @@
   }
   
   .board_cards {
-    background-color: #f8f8f8;
-    padding: 10px;
+    /* background-color: #f8f8f8; */
+    padding: 4px;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     overflow-y: auto;
-    border: 2px solid #f8f8f8;
-    border-radius: 10px;
+    /* border: 2px solid #f8f8f8; */
+    border-radius: 4px;
+    opacity: 1;
   }
   
   .board_add-card {
@@ -78,6 +99,7 @@
     box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.12);
     width: 50%;
     margin: 10px auto;
+    margin-bottom: 0px;
     text-align: center;
   }
   
