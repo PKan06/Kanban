@@ -8,9 +8,14 @@ import axios from "axios";
 function App() {
   const [boards, setBoards] = useState([]);
 
+  console.log(process.env)
+  let api_key = process.env.REACT_APP_API_KEY_LOCAL;
+  if(process.env.NODE_ENV === "production")
+    api_key = process.env.REACT_APP_API_KEY;
+
   const fetchcards = () => {
     axios
-      .get("http://localhost:5000/board/all")
+      .get(`${api_key}board/all`)
       .then((res) => {
         // console.log(res.data);
         setBoards(res.data);
@@ -29,6 +34,7 @@ function App() {
   };
   useEffect(() => {
     fetchcards();
+    // eslint-disable-next-line
   }, []);
 
   const [targetCard, setTargetCard] = useState({
@@ -41,7 +47,7 @@ function App() {
     // const index = boards.findIndex((item) => item.id === bid);
     // if (index < 0) return;
     // console.log("working");
-    await axios.post(`http://localhost:5000/card/${bid}`, {
+    await axios.post(`${api_key}card/${bid}`, {
       title: title,
     });
     fetchcards();
@@ -61,7 +67,7 @@ function App() {
     // const index = boards.findIndex((item) => item.id === bid);
     // if (index < 0) return;
     const delete_card = await axios.delete(
-      `http://localhost:5000/card/deleteCard/${bid}`,
+      `${api_key}card/deleteCard/${bid}`,
       {
         data: { cardID: cid },
       }
@@ -79,7 +85,7 @@ function App() {
   };
 
   const addboard = async (name) => {
-    const add_board = await axios.post(`http://localhost:5000/board/`, {
+    const add_board = await axios.post(`${api_key}board/`, {
       title: name,
     });
     console.log(add_board.data);
@@ -96,7 +102,7 @@ function App() {
 
   const removeBoard = async (bid) => {
     const delete_board = await axios.delete(
-      `http://localhost:5000/board/${bid}`
+      `${api_key}board/${bid}`
     );
     console.log(delete_board.data);
     fetchcards();
@@ -109,7 +115,7 @@ function App() {
       // console.log("bid -> ", bid);
       // console.log("cid -> ", cid);
       const card_on_board = await axios.put(
-        `http://localhost:5000/board/card-on-board`,
+        `${api_key}board/card-on-board`,
         {
           T_bid: targetBoard,
           bid: bid,
@@ -129,7 +135,7 @@ function App() {
       // console.log("T_cid -> ", targetCard.cid);
 
       const card_on_card_board = await axios.put(
-        `http://localhost:5000/board/card-on-card`,
+        `${api_key}board/card-on-card`,
         {
           bid: bid,
           cid: cid,
@@ -268,6 +274,7 @@ function App() {
               // updateCard={updateCard}
               fetchcards={fetchcards}
               handelOnDrop={handelOnDrop}
+              api_key={api_key}
               // ref={removeFromTeamRef}
               // onDropPlayer={movePlayerToTeam}
             />

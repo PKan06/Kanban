@@ -35,20 +35,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-app.get('/',(req,res)=>{
-  app.use(express.static(path.resolve(__dirname,'build')))
-  // console.log(__dirname);
-  res.sendFile(path.resolve(__dirname,'build','index.html'))
-  // res.send("hello")
-})
-if(process.env.NODE_ENV == 'production'){
+
+// if(process.env.NODE_ENV == 'production'){
   // const path = require('path');
 
   app.get('/',(req,res)=>{
     app.use(express.static(path.resolve(__dirname,'build')))
-    res.sendFile(path.ressolve(__dirname,'build','index.html'))
+    res.sendFile(path.resolve(__dirname,'build','index.html'))
   })
-}
+// }
 
 app.listen(PORT, () =>
   console.log(`Server rinning on : http://localhost:${PORT}`)

@@ -30,10 +30,11 @@ function CardInfo(props) {
   const [values, setValues] = useState({
     ...props.card,
   });
+  const api_key = props.api_key;
 
   const updateCard = () => {
     axios
-      .get(`http://localhost:5000/card/${props.cardID}`)
+      .get(`${api_key}card/${props.cardID}`)
       .then((res) => {
         // console.log(res.data);
         setValues(res.data);
@@ -52,7 +53,7 @@ function CardInfo(props) {
   };
   const updateTitle = async (value) => {
     await axios
-      .put(`http://localhost:5000/card/${props.cardID}`, {
+      .put(`${api_key}card/${props.cardID}`, {
         title: value,
       })
       .then((res) => {
@@ -65,7 +66,7 @@ function CardInfo(props) {
 
   const updateDesc = async (value) => {
     await axios
-      .put(`http://localhost:5000/card/${props.cardID}`, {
+      .put(`${api_key}card/${props.cardID}`, {
         desc: value,
       })
       .then((res) => {
@@ -80,13 +81,13 @@ function CardInfo(props) {
   const addLabel = async (label) => {
     // const index = values.labels.findIndex((item) => item.text === label.text);
     // if (index > -1) return;
-    console.log(label, selectedColor);
+    // console.log(label, selectedColor);
     if (label.color === "") {
       alert("Specify the color for the label");
     } else {
       // const addedlabel = await axios.put(
       await axios.put(
-        `http://localhost:5000/card/addLabel/${props.cardID}`,
+        `${api_key}card/addLabel/${props.cardID}`,
         {
           text: label.text,
           color: selectedColor,
@@ -110,7 +111,7 @@ function CardInfo(props) {
     // const tempLabels = values.labels.filter((item) => item.text !== label.text);
     // const removelabel = await axios.put(
     await axios.put(
-      `http://localhost:5000/card/deleteLabel/${props.cardID}`,
+      `${api_key}card/deleteLabel/${props.cardID}`,
       {
         LabelID: labelID,
       },
@@ -135,7 +136,7 @@ function CardInfo(props) {
     } else {
       // const task = await axios.put(
       await axios.put(
-        `http://localhost:5000/card/addTask/${props.cardID}`,
+        `${api_key}card/addTask/${props.cardID}`,
         {
           title: value,
           completed: false,
@@ -160,7 +161,7 @@ function CardInfo(props) {
   const removeTask = async (id) => {
     // const tasks = [...values.task];
     await axios
-      .put(`http://localhost:5000/card/deleteTask/${props.cardID}`, {
+      .put(`${api_key}card/deleteTask/${props.cardID}`, {
         taskID: id,
       })
       .then((res) => {
@@ -180,7 +181,7 @@ function CardInfo(props) {
     // const tasks = [...values.task];
 
     await axios
-      .put(`http://localhost:5000/task/${id}`, {
+      .put(`${api_key}task/${id}`, {
         completed: value,
       })
       .then((res) => {
@@ -211,7 +212,7 @@ function CardInfo(props) {
     if (!date) return;
 
     await axios
-      .put(`http://localhost:5000/card/${props.cardID}`, {
+      .put(`${api_key}card/${props.cardID}`, {
         date: date + new Date().toISOString().substr(10),
       })
       .then((res) => {
@@ -246,7 +247,7 @@ function CardInfo(props) {
             <Editable
               defaultValue={values.title}
               default={values.title}
-              buttonText="Set Title"
+              buttonText="Update Title"
               text={values.title}
               onsubmit={updateTitle}
               displayClass="enter-value"
@@ -262,7 +263,7 @@ function CardInfo(props) {
               defaultValue={values.desc}
               default={values.desc}
               text={values.desc || "Add a Description"}
-              buttonText="Set Description"
+              buttonText="Update Description"
               placeholder="Enter description"
               onsubmit={updateDesc}
               displayClass="enter-value"
@@ -302,7 +303,7 @@ function CardInfo(props) {
             <Editable
               text="Add Label"
               placeholder="Enter label text"
-              buttonText="Set Label"
+              buttonText="Add Label"
               body={
                 <ul>
                   {colors.map((item, index) => (

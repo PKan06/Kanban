@@ -62,6 +62,7 @@ function Board(props) {
             removeCard={props.removeCard}
             handeldragEnd={props.handeldragEnd}
             handeldragEnter={props.handeldragEnter}
+            api_key={props.api_key}
             // updateCard={props.updateCard}
             fetchcards={props.fetchcards}
             onDropPlayer={props.onDropPlayer}

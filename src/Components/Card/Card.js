@@ -37,6 +37,8 @@ function Card(props) {
           boardID={props.boardID}
           cardID={props.card.id}
           fetchcards={props.fetchcards}
+          api_key={props.api_key}
+
         />
       )}
       <div
