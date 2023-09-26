@@ -12,6 +12,7 @@
     max-width: 250px;
     max-height: 390px;
     overflow-y: auto;
+    z-index: 1;
   }
   
   .hand:hover{
