@@ -8,10 +8,11 @@ import axios from "axios";
 function App() {
   const [boards, setBoards] = useState([]);
 
-  console.log(process.env)
-  let api_key = process.env.REACT_APP_API_KEY_LOCAL;
-  if(process.env.NODE_ENV === "production")
-    api_key = process.env.REACT_APP_API_KEY;
+  let api_key = "";
+  console.log(process.env.VERCEL_ENV, process.env.VERCEL_URL);
+  if (process.env.VERCEL_ENV === "production") {
+    api_key = `http://${process.env.VERCEL_URL}`;
+  } else api_key = process.env.REACT_APP_API_KEY_LOCAL;
 
   const fetchcards = () => {
     axios
@@ -66,12 +67,9 @@ function App() {
   const removeCard = async (bid, cid) => {
     // const index = boards.findIndex((item) => item.id === bid);
     // if (index < 0) return;
-    const delete_card = await axios.delete(
-      `${api_key}card/deleteCard/${bid}`,
-      {
-        data: { cardID: cid },
-      }
-    );
+    const delete_card = await axios.delete(`${api_key}card/deleteCard/${bid}`, {
+      data: { cardID: cid },
+    });
     console.log(delete_card.data);
     fetchcards();
     // const tempBoards = [...boards];
@@ -101,9 +99,7 @@ function App() {
   };
 
   const removeBoard = async (bid) => {
-    const delete_board = await axios.delete(
-      `${api_key}board/${bid}`
-    );
+    const delete_board = await axios.delete(`${api_key}board/${bid}`);
     console.log(delete_board.data);
     fetchcards();
   };
@@ -114,14 +110,11 @@ function App() {
       // console.log("\nvalue ->", targetBoard);
       // console.log("bid -> ", bid);
       // console.log("cid -> ", cid);
-      const card_on_board = await axios.put(
-        `${api_key}board/card-on-board`,
-        {
-          T_bid: targetBoard,
-          bid: bid,
-          cid: cid,
-        }
-      );
+      const card_on_board = await axios.put(`${api_key}board/card-on-board`, {
+        T_bid: targetBoard,
+        bid: bid,
+        cid: cid,
+      });
       setTargetBoard("");
       console.log(card_on_board.data);
       fetchcards();
