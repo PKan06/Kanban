@@ -37,9 +37,8 @@ const __dirname = path.dirname(__filename);
 
 
 app.get('/',(req,res)=>{
-  // app.use(express.static(path.resolve(__dirname,'build')))
-  // res.sendFile(path.resolve(__dirname,'build','index.html'))
-  res.send({msg:"hello"})
+  app.use(express.static(path.resolve(__dirname,'build')))
+  res.sendFile(path.resolve(__dirname,'build','index.html'))
 })
 
 app.listen(PORT, () =>
