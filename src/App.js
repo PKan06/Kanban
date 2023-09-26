@@ -9,9 +9,8 @@ function App() {
   const [boards, setBoards] = useState([]);
 
   let api_key = "";
-  console.log(process.env.VERCEL_ENV, process.env.VERCEL_URL);
-  if (process.env.VERCEL_ENV === "production") {
-    api_key = `http://${process.env.VERCEL_URL}`;
+  if (process.env.REACT_APP_NODE_ENV === "production") {
+    api_key = `${process.env.REACT_APP_API_KEY}`;
   } else api_key = process.env.REACT_APP_API_KEY_LOCAL;
 
   const fetchcards = () => {
