@@ -13,6 +13,6 @@ A one and only solution to make you your One percent
 ![Preview](https://github.com/PKan06/Kanban/blob/main/gallery/Delete%20Card.png?raw=true)
 
 # Deployment Link
-Find My deployment link with vercel : [Deployment Link](https://kanban-board-six-rho.vercel.app/)
+Find My deployment link with vercel : [Deployment Link](https://task-manager-choglh2q5-pkan06.vercel.app/)
 
 Enjoy 😎
